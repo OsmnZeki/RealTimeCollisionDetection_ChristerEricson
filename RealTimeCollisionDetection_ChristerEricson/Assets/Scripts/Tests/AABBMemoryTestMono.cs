@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using CollisionDetection2D.BoundingVolumes;
 using UnityEngine;
