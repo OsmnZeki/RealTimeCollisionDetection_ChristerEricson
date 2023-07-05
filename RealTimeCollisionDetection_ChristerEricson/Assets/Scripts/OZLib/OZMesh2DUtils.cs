@@ -45,13 +45,7 @@ namespace OZLib
             center /= points.Length;
             return center;
         }
-
-        //TODO: error check
-        public static void GetCounterClockwisePoints(Vector2[] points)
-        {
-            var center = GetCenter(points);
-            Array.Sort(points, new VertexComparer(center));
-        }
+        
 
 
         //Convex hull functions
@@ -88,6 +82,8 @@ namespace OZLib
 
         
         static Stack<Vector2> vectorStack = new Stack<Vector2>();
+        
+        //TODO: 3d pointleri z=0 gibi kabul edildiğinde doğru çalışmıyor ama gerçek 2d pointler için doğru çalışıyor
         public static Vector2[] GetConvexHullPoints(Vector2[] points)
         {
             int n = points.Length;

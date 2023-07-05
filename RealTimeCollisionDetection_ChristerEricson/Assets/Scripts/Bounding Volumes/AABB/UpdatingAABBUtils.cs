@@ -140,9 +140,7 @@ namespace CollisionDetection2D.BoundingVolumes
         public static AABBMinMax GetInitialBound(Vector2[] worldVertices, out HillClimbData hillClimbData)
         {
             hillClimbData = new HillClimbData();
-
             var hullPoints = OZMesh2DUtils.GetConvexHullPoints(worldVertices);
-            OZMesh2DUtils.GetCounterClockwisePoints(hullPoints);
 
             for (int i = 0; i < hullPoints.Length; i++)
             {
