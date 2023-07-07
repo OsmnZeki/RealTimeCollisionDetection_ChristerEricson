@@ -8,6 +8,8 @@ public class TestShapes
     public Transform transform;
     public List<Vector3> vertices = new List<Vector3>();
     public Vector2[] worldVertices2D;
+    public AABBMinMax initialBounds;
+    public AABBMinMax currentBounds;
 }
 
 public class AABBBoundTestMono : MonoBehaviour
@@ -15,26 +17,36 @@ public class AABBBoundTestMono : MonoBehaviour
     public MeshFilter[] meshFilter;
     List<TestShapes> testShapesList = new List<TestShapes>();
 
-    List<Vector3> tempWorldVertices = new List<Vector3>();
-    
     void Start()
     {
-        for (int i = 0; i < meshFilter.Length; i++)
+        for (int s = 0; s < meshFilter.Length; s++)
         {
-            var mesh = meshFilter[i].mesh;
+            var mesh = meshFilter[s].mesh;
             var v = new List<Vector3>();
             
             mesh.GetVertices(v);
             Vector2[] vector2s = new Vector2[v.Count];
-            testShapesList.Add(new TestShapes()
+            
+            TestShapes shape = new TestShapes();
+            shape.vertices = v;
+            shape.transform = meshFilter[s].transform;
+            shape.worldVertices2D = vector2s;
+            tempWorldVertices.Clear();
+            for (int i = 0; i < shape.vertices.Count; i++)
             {
-                vertices = v,
-                worldVertices2D = vector2s,
-                transform = meshFilter[i].transform
-            });
+                tempWorldVertices.Add(shape.transform.TransformPoint(shape.vertices[i]));
+            }
+            
+            OZVectorUtils.Vector3ArrayToVector2Array(tempWorldVertices.ToArray(), shape.worldVertices2D);
+            shape.initialBounds = AABBUpdateMethod2.GetAABB_Bound(shape.worldVertices2D);
+            shape.currentBounds = shape.initialBounds;
+
+
+            testShapesList.Add(shape);
         }
     }
 
+    List<Vector3> tempWorldVertices = new List<Vector3>();
     void Update()
     {
         for (int s = 0; s < testShapesList.Count; s++)
@@ -46,10 +58,10 @@ public class AABBBoundTestMono : MonoBehaviour
             {
                 tempWorldVertices.Add(shape.transform.TransformPoint(shape.vertices[i]));
             }
-        
-            OZVectorUtils.Vector3ArrayToVector2Array(tempWorldVertices.ToArray(), shape.worldVertices2D);
-            var hullPoints = OZMesh2DUtils.GetConvexHullPoints(shape.worldVertices2D);
-            OZDebug.DrawPath(hullPoints, Color.red,0);
+
+            shape.currentBounds = AABBUpdateMethod4.UpdateAABB(shape.initialBounds, shape.transform.eulerAngles.z,shape.transform.position); 
+            OZDebug.DrawBoxMinMaxPoints(shape.currentBounds.min, shape.currentBounds.max, Color.red,0);
+
         }
         
         

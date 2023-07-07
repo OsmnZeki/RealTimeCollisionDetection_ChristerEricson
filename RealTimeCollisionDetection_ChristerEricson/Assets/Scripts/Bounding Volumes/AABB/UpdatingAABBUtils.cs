@@ -159,4 +159,59 @@ namespace CollisionDetection2D.BoundingVolumes
             return new AABBMinMax();
         }
     }
+    
+    //Section 4.2.6 ->  AABB Recomputed from Rotated AABB
+    /*
+     * TODO: anlayamadım eksik kaldı
+     * 
+     *  Algoritma 0dan bir bound vermek yerine, var olan başlangıç boundunu olası bir rotasyon için güncellemeyi hedefliyor.
+     *  Kitaptan farklı olarak 2d collision detection yapıldığı için matrix ile uğraşmadım. Sadece z rotasyonu için çalışıyor.
+     * 
+     */
+
+    public static class AABBUpdateMethod4
+    {
+        public static AABBMinMax UpdateAABB(AABBMinMax bound, float zRotationInDegress, Vector3 translation)
+        {
+            zRotationInDegress *= Mathf.Deg2Rad;
+            
+            AABBMinMax newBound = new AABBMinMax();
+            newBound.max = translation;
+            newBound.min = translation;
+            
+            var cos = Mathf.Cos(zRotationInDegress);
+            var sin = Mathf.Sin(zRotationInDegress);
+
+            var e1 = bound.min.x * cos - bound.min.y * sin;
+            var f1 =  bound.max.x * cos - bound.max.y * sin;
+
+            if (e1 < f1)
+            {
+                newBound.min.x = e1;
+                newBound.max.x = f1;
+            }
+            else
+            {
+                newBound.min.x = f1;
+                newBound.max.x = e1;
+            }
+            
+            var e2 = bound.min.x * sin + bound.min.y * cos;
+            var f2 = bound.max.x * sin + bound.max.y * cos;
+
+            if (e2 < f2)
+            {
+                newBound.min.x = e2;
+                newBound.max.x = f2;
+            }
+            else
+            {
+                newBound.min.x = f2;
+                newBound.max.x = e2;
+            }
+
+            return newBound;
+        }
+
+    }
 }

@@ -274,7 +274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5217978706621872809, guid: 2eb309c038a306c45a8ce2d3ce06620c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 21.58
+      value: 22.14
       objectReference: {fileID: 0}
     - target: {fileID: -5217978706621872809, guid: 2eb309c038a306c45a8ce2d3ce06620c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -678,9 +678,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshFilter:
-  - {fileID: 1226761232}
   - {fileID: 870074149}
-  - {fileID: 1943210498}
 --- !u!33 &870074149 stripped
 MeshFilter:
   m_CorrespondingSourceObject: {fileID: -787347770227272373, guid: 2eb309c038a306c45a8ce2d3ce06620c, type: 3}
@@ -780,11 +778,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!33 &1226761232 stripped
-MeshFilter:
-  m_CorrespondingSourceObject: {fileID: 763392349456102199, guid: 2eb309c038a306c45a8ce2d3ce06620c, type: 3}
-  m_PrefabInstance: {fileID: 495030932}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1451031004
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,8 +862,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1943210498 stripped
-MeshFilter:
-  m_CorrespondingSourceObject: {fileID: 8534081337399169198, guid: 2eb309c038a306c45a8ce2d3ce06620c, type: 3}
-  m_PrefabInstance: {fileID: 495030932}
-  m_PrefabAsset: {fileID: 0}
