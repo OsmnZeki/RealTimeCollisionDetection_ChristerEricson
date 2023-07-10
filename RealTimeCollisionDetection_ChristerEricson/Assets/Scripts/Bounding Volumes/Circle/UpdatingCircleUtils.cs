@@ -1,20 +1,63 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CollisionDetection2D.BoundingVolumes
 {
-    public struct Circle
+    //Section 4.3.2 ->
+    /*
+     * Çalışma mantığı:
+     *  Tüm vertexlerin sığabileceği bir circle bulunuyor. Bunu yapabilmek için de centera en uzak olan vertex seçiliyor radius olarak işaretleniyor.
+     */
+    public static class CircleUpdateMethod1
     {
-        public Vector2 center;
-        public float radius;
-    }
+        public static Circle GetCircle_Bound(Vector2[] worldVertices)
+        {
+            int farthestIdx = 0;
+            var center = OZLib.OZMesh2DUtils.GetCenter(worldVertices);
 
-    public static class BoundingCircleUtils
+            void FindFarthestPoint(Vector2[] points)
+            {
+                float maxDist = 0f;
+                for (int i = 0; i < points.Length; i++)
+                {
+                    float dist = (center-points[i]).sqrMagnitude;
+                    if (dist > maxDist)
+                    {
+                        maxDist = dist;
+                        farthestIdx = i;
+                    }
+                }
+            }
+
+            //Step 1 find farthest point
+            FindFarthestPoint(worldVertices);
+
+            //Step 2 find circle bound
+            var radius = Mathf.Sqrt((center-worldVertices[farthestIdx]).sqrMagnitude);
+            
+            return new Circle()
+            {
+                radius = radius,
+                center = center
+            };
+        }
+    }
+    
+    
+    //Section 4.3.2 -> Yukarıdaki methodun daha optimize edilmiş hali Ritter90
+    /*
+     * Çalışma mantığı:
+     * Tüm vertexlerin sığabileceği bir circle bulunuyor. Bunu yapabilmek için de centera en uzak olan vertex seçiliyor radius olarak işaretleniyor.
+     */
+    
+    public static class CircleUpdateMethod2
     {
-        public static Circle Ritter90ComputeCircleBound(Vector3[] points)
+        public static Circle GetCircle_Bound(Vector2[] worldVertices)
         {
             //Step1 Functions
             int min, max;
-            void MostSeperatedPointsOnAABB(Vector3[] point)
+            void MostSeperatedPointsOnAABB(Vector2[] point)
             {
                 int minX = 0, maxX = 0, minY = 0, maxY = 0;
                 for (int i = 0; i < point.Length; i++)
@@ -40,7 +83,7 @@ namespace CollisionDetection2D.BoundingVolumes
                 }
             }
 
-            Circle CircleFromDistantPoint(Vector3[] points)
+            Circle CircleFromDistantPoint(Vector2[] points)
             {
                 Circle c = new Circle();
                 c.center = (points[min] + points[max]) * 0.5f;
@@ -51,7 +94,7 @@ namespace CollisionDetection2D.BoundingVolumes
             }
             
             //Step2 functions
-            void RitterCircle(ref Circle c, Vector3[] points)
+            void RitterCircle(ref Circle c, Vector2[] points)
             {
                 for (int i = 0; i < points.Length; i++)
                 {
@@ -71,15 +114,13 @@ namespace CollisionDetection2D.BoundingVolumes
             }
             
             //Step 1
-            MostSeperatedPointsOnAABB(points);
-            Circle c = CircleFromDistantPoint(points);
+            MostSeperatedPointsOnAABB(worldVertices);
+            Circle c = CircleFromDistantPoint(worldVertices);
             
             //Step 2
-            RitterCircle(ref c, points);
+            RitterCircle(ref c, worldVertices);
             return c;
         }
     }
-    
 }
-
 

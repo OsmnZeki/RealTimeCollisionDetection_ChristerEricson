@@ -3,7 +3,7 @@ using CollisionDetection2D.BoundingVolumes;
 using OZLib;
 using UnityEngine;
 
-public class TestShapes
+public class TestAABBShapes
 {
     public Transform transform;
     public List<Vector3> vertices = new List<Vector3>();
@@ -15,7 +15,7 @@ public class TestShapes
 public class AABBBoundTestMono : MonoBehaviour
 {
     public MeshFilter[] meshFilter;
-    List<TestShapes> testShapesList = new List<TestShapes>();
+    List<TestAABBShapes> testShapesList = new List<TestAABBShapes>();
 
     void Start()
     {
@@ -27,7 +27,7 @@ public class AABBBoundTestMono : MonoBehaviour
             mesh.GetVertices(v);
             Vector2[] vector2s = new Vector2[v.Count];
             
-            TestShapes shape = new TestShapes();
+            TestAABBShapes shape = new TestAABBShapes();
             shape.vertices = v;
             shape.transform = meshFilter[s].transform;
             shape.worldVertices2D = vector2s;
